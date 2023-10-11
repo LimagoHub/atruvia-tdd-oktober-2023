@@ -21,6 +21,7 @@ public class Schwein {
     }
 
     public void setName(final String name) {
+        if("elsa".equalsIgnoreCase(name)) throw new IllegalArgumentException("Schwein darf nicht Elsa heissen");
         this.name = name;
     }
 
