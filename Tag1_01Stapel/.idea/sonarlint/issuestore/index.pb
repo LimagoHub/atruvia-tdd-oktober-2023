@@ -9,3 +9,7 @@ i
 0src/main/java/de/atruvia/collections/Stapel.java,e\b\eb7f5157b4ef8a1afa2bd2ebcd22f446cd5516cb
 d
 4src/test/java/de/atruvia/collections/StapelTest.java,d\4\d4476cb5a9ec9248c6669ba8167a4e0efa753fda
+]
+-.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
