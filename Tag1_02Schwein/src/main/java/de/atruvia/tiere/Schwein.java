@@ -12,7 +12,7 @@ public class Schwein {
     }
 
     public Schwein(final String name) {
-        this.name = name;
+        setName(name);
         setGewicht(10);
     }
 
@@ -20,7 +20,7 @@ public class Schwein {
         return name;
     }
 
-    public void setName(final String name) {
+    public final void setName(final String name) {
         if("elsa".equalsIgnoreCase(name)) throw new IllegalArgumentException("Schwein darf nicht Elsa heissen");
         this.name = name;
     }
