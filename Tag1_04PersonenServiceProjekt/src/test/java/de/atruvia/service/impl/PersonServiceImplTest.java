@@ -2,9 +2,12 @@ package de.atruvia.service.impl;
 
 import de.atruvia.persistence.Person;
 import de.atruvia.persistence.PersonenRepository;
+import de.atruvia.service.BlacklistService;
 import de.atruvia.service.PersonenServiceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,6 +23,8 @@ class PersonServiceImplTest {
     @Mock
     private PersonenRepository personenRepositoryMock;
 
+    @Mock
+    private BlacklistService blacklistServiceMock;
 
     private static final Person VALID_PERSON = Person.builder().vorname("John").nachname("Doe").build();
     @Test
@@ -63,14 +68,24 @@ class PersonServiceImplTest {
 
     @Test
     void speichern_blacklistedPerson_throwsPersonServiceException () {
-        final Person invalidPerson = Person.builder().vorname("Attila").nachname("der Hunne").build();
-        PersonenServiceException ex = assertThrows(PersonenServiceException.class, ()->objectUnderTest.speichern(invalidPerson));
+        when(blacklistServiceMock.isBlacklisted(any(Person.class))).thenReturn(true);
+        PersonenServiceException ex = assertThrows(PersonenServiceException.class, ()->objectUnderTest.speichern(VALID_PERSON));
         assertEquals("Person steht auf der schwarzen Liste.", ex.getMessage());
 
     }
 
     @Test
+    void speichern_unexpectedRuntimeExceptionInBlacklistService_throwsPersonServiceException () {
+        when(blacklistServiceMock.isBlacklisted(any(Person.class))).thenThrow(NumberFormatException.class);
+        PersonenServiceException ex = assertThrows(PersonenServiceException.class, ()->objectUnderTest.speichern(VALID_PERSON));
+        assertEquals("Ein Fehler ist aufgetreten.", ex.getMessage());
+        assertEquals(NumberFormatException.class, ex.getCause().getClass());
+
+    }
+
+    @Test
     void speichern_unexcpetedRuntimeExceptionInUnderlyingService_throwsPersonServiceException () {
+        when(blacklistServiceMock.isBlacklisted(any(Person.class))).thenReturn(false);
         doThrow(new IndexOutOfBoundsException(10)).when(personenRepositoryMock).save(any(Person.class));
         PersonenServiceException ex = assertThrows(PersonenServiceException.class, ()->objectUnderTest.speichern(VALID_PERSON));
         assertEquals("Ein Fehler ist aufgetreten.", ex.getMessage());
@@ -79,10 +94,23 @@ class PersonServiceImplTest {
     }
     @Test
     void speichern_HappyDay_personPassedToRepo () {
+        when(blacklistServiceMock.isBlacklisted(any(Person.class))).thenReturn(false);
         doNothing().when(personenRepositoryMock).save(any(Person.class));
         assertDoesNotThrow( ()->objectUnderTest.speichern(VALID_PERSON));
 
-        verify(personenRepositoryMock, times(1)).save(VALID_PERSON);
+        ArgumentCaptor<Person> peopleCaptor = ArgumentCaptor.forClass(Person.class);
+
+        InOrder order = inOrder(blacklistServiceMock, personenRepositoryMock);
+
+        order.verify(blacklistServiceMock).isBlacklisted(peopleCaptor.capture());
+
+        assertNotNull(peopleCaptor.getValue().getId());
+        assertEquals(36, peopleCaptor.getValue().getId().length());
+        assertEquals("John", peopleCaptor.getValue().getVorname());
+        assertEquals("Doe", peopleCaptor.getValue().getNachname());
+
+        order.verify(personenRepositoryMock, times(1)).save(peopleCaptor.capture());
+
 
     }
 

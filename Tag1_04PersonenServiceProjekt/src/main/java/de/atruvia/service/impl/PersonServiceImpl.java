@@ -2,14 +2,20 @@ package de.atruvia.service.impl;
 
 import de.atruvia.persistence.Person;
 import de.atruvia.persistence.PersonenRepository;
+import de.atruvia.service.BlacklistService;
 import de.atruvia.service.PersonenService;
 import de.atruvia.service.PersonenServiceException;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonenService {
 
+
     private final PersonenRepository repo;
+    private final BlacklistService blacklistService;
 
     /*
        1.) wenn person = null => PSE
@@ -33,6 +39,7 @@ public class PersonServiceImpl implements PersonenService {
 
     private void speichernImpl(final Person person) throws PersonenServiceException {
         checkPerson(person);
+        person.setId(UUID.randomUUID().toString());
         repo.save(person);
     }
 
@@ -42,7 +49,7 @@ public class PersonServiceImpl implements PersonenService {
     }
 
     private void businessCheck(final Person person) throws PersonenServiceException {
-        if("Attila".equals(person.getVorname()))
+        if(blacklistService.isBlacklisted(person))
             throw new PersonenServiceException("Person steht auf der schwarzen Liste.");
     }
 
