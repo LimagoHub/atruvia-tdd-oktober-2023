@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
@@ -114,7 +116,42 @@ class PersonServiceImplTest {
 
     }
 
+    @Test
+    void speichern_HappyDayUUID_personPassedToRepo () {
+        UUID result = UUID.fromString("8cf917c5-8069-479d-bb8e-ed76658d5b85");
+        try (var mocked = mockStatic(UUID.class)) {
+            //ARRANGE
+            final Person expectedSavedPerson = Person.builder().vorname("John").nachname("Doe").id("8cf917c5-8069-479d-bb8e-ed76658d5b85").build();
+            mocked.when(UUID::randomUUID).thenReturn(result);
+            when(blacklistServiceMock.isBlacklisted(any(Person.class))).thenReturn(false);
+            doNothing().when(personenRepositoryMock).save(any(Person.class));
+
+            //ACT
+            assertDoesNotThrow(() -> objectUnderTest.speichern(VALID_PERSON));
 
 
+            //ASSERT
+            verify(personenRepositoryMock, times(1)).save(expectedSavedPerson);
+        }
+    }
+
+    @Test
+    void speichern_Lambda_personPassedToRepo () {
+        when(blacklistServiceMock.isBlacklisted(any(Person.class))).thenAnswer(invocationOnMock -> {
+            return false;
+        });
+        doAnswer(invocationOnMock -> {
+            Person capturedPerson = invocationOnMock.getArgument(0);
+            assertNotNull(capturedPerson.getId());
+            assertEquals(36, capturedPerson.getId().length());
+            assertEquals("John", capturedPerson.getVorname());
+            assertEquals("Doe", capturedPerson.getNachname());
+            return null;
+        }).when(personenRepositoryMock).save(any(Person.class));
+        assertDoesNotThrow( ()->objectUnderTest.speichern(VALID_PERSON));
+
+
+
+    }
 
 }

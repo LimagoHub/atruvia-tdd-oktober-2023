@@ -6,11 +6,13 @@ import de.atruvia.service.BlacklistService;
 import de.atruvia.service.PersonenService;
 import de.atruvia.service.PersonenServiceException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
+
 public class PersonServiceImpl implements PersonenService {
 
 
@@ -29,6 +31,7 @@ public class PersonServiceImpl implements PersonenService {
     @Override
     public void speichern(final Person person) throws PersonenServiceException {
         try {
+
             speichernImpl(person);
         } catch (RuntimeException e) {
             throw new PersonenServiceException("Ein Fehler ist aufgetreten.",e);
