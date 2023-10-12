@@ -37,6 +37,11 @@ public class PersonServiceImpl implements PersonenService {
 
     }
 
+    @Override
+    public void speichern(final String vorname, final String nachname) throws PersonenServiceException {
+        speichern(Person.builder().vorname(vorname).nachname(nachname).build());
+    }
+
     private void speichernImpl(final Person person) throws PersonenServiceException {
         checkPerson(person);
         person.setId(UUID.randomUUID().toString());
@@ -61,4 +66,6 @@ public class PersonServiceImpl implements PersonenService {
         if(person.getNachname() == null || person.getNachname().length() < 2)
             throw new PersonenServiceException("Nachname zu kurz.");
     }
+
+
 }
