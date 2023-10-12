@@ -1,6 +1,8 @@
 package de.atruvia.tiere;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,29 +17,35 @@ class SchweinTest {
     void setup() {
         objectUnderTest = new Schwein();
     }
-    @Test
-    void ctor_default_objectCorrectIntializied() {
-        assertEquals("Nobody", objectUnderTest.getName());
-        assertEquals(initialWeight, objectUnderTest.getGewicht());
-    }
-    @Test
-    void ctor_wrongNameNull_throwsIlliegalArgumentExceptionAndErrorMessage() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->new Schwein(null));
-        assertEquals("Name darf nicht null sein", ex.getMessage());
-    }
 
-    @Test
-    void ctor_wrongNameElsa_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->new Schwein("Elsa"));
-        assertEquals("Name darf nicht Elsa sein", ex.getMessage());
-    }
+    @Nested
+    @DisplayName(" dfg  sgfd sfgd sfgh")
+    class Construcrors {
+        @Test
+        void ctor_default_objectCorrectIntializied() {
+            assertEquals("Nobody", objectUnderTest.getName());
+            assertEquals(initialWeight, objectUnderTest.getGewicht());
+        }
 
-    @Test
-    void ctor_validName_objectCorrectIntializied() {
+        @Test
+        void ctor_wrongNameNull_throwsIlliegalArgumentExceptionAndErrorMessage() {
+            IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> new Schwein(null));
+            assertEquals("Name darf nicht null sein", ex.getMessage());
+        }
 
-        Schwein objectUnderTest = new Schwein(validName);
-        assertEquals("Piggy", objectUnderTest.getName());
-        assertEquals(initialWeight, objectUnderTest.getGewicht());
+        @Test
+        void ctor_wrongNameElsa_throwsIllegalArgumentException() {
+            IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> new Schwein("Elsa"));
+            assertEquals("Name darf nicht Elsa sein", ex.getMessage());
+        }
+
+        @Test
+        void ctor_validName_objectCorrectIntializied() {
+
+            Schwein objectUnderTest = new Schwein(validName);
+            assertEquals("Piggy", objectUnderTest.getName());
+            assertEquals(initialWeight, objectUnderTest.getGewicht());
+        }
     }
 
     @Test
