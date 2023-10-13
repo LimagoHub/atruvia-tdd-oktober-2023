@@ -21,3 +21,17 @@ y
 Isrc/test/java/de/goodyear/gui/presenter/Euro2DollarPresenterImplTest.java,f\e\fe0951fae9c1e43f6428a5890fa009d67ab05dc7
 _
 /src/main/java/de/goodyear/application/Main.java,3\b\3bfa7cb45b5e8ce377bf8bb02b07062e6677f449
+f
+6src/main/java/de/atruvia/model/Euro2DollarRechner.java,2\3\23ba8a9765fdca6405c5101aa9a787f6eeaf5d30
+j
+:src/main/java/de/atruvia/model/Euro2DollarRechnerImpl.java,1\0\102d615a0ea43dd83cfc8daacc7e30fbc55bc5fd
+l
+<src/main/java/de/atruvia/gui/Euro2DollarRechnerViewImpl.java,7\e\7ea89ab7ba1249b3743ed66480d1f74d5b58f54f
+p
+@src/main/java/de/atruvia/gui/presenter/Euro2DollarPresenter.java,9\6\960a895cb25979a37de0e4499307de1ead74d61b
+h
+8src/main/java/de/atruvia/gui/Euro2DollarRechnerView.java,5\e\5e9945c12baa4d54e068cbd2c2c62c0cf6d2c0dc
+t
+Dsrc/main/java/de/atruvia/gui/presenter/Euro2DollarPresenterImpl.java,a\4\a412ddd49d79510db982e0d8faa04008fa5d9f04
+^
+.src/main/java/de/atruvia/application/Main.java,0\9\09151809ecc4f440cba1563bcabc0383c5bec388
